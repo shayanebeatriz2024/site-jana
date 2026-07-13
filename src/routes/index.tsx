@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { MessageCircle, MapPin, Phone, Instagram, Play, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import hero from "@/assets/hero.jpg";
@@ -11,6 +11,7 @@ import sSkin from "@/assets/service-skin.jpg";
 import dra1 from "@/assets/dra1.jpg";
 import dra2 from "@/assets/dra2.jpg";
 import clinic from "@/assets/clinic.jpg";
+import JJLogo from "@/assets/JJ.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,12 +26,12 @@ export const Route = createFileRoute("/")({
 });
 
 const services = [
-  { title: "Limpeza de pele", img: sSkin },
-  { title: "Laser", img: sLaser },
-  { title: "Botox", img: sBotox },
-  { title: "Harmonização facial", img: sFiller },
-  { title: "Procedimentos corporais", img: sBody },
-  { title: "Lábios", img: sLips },
+  { title: "Design de Sobrancelhas", desc: "Modelagem e contorno personalizados", img: sSkin },
+  { title: "Microblading Fio a Fio", desc: "Técnica semipermanente realista", img: sLaser },
+  { title: "Design + Tintura", desc: "Realce com tonalizante nos fios brancos", img: sBotox },
+  { title: "Depilação com Cera", desc: "Acabamento suave e duradouro", img: sFiller },
+  { title: "Limpeza Facial", desc: "Pele renovada e radiante", img: sBody },
+  { title: "Outros Procedimentos", desc: "Veja o catálogo completo", img: sLips },
 ];
 
 const testimonials = [
@@ -43,23 +44,21 @@ function Nav() {
   return (
     <header className="absolute top-0 inset-x-0 z-30">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-2">
-          <div className="h-9 w-9 rounded-full border border-sage/60 flex items-center justify-center">
-            <span className="font-display text-sage text-lg italic">B</span>
-          </div>
+        <a href="#" className="flex items-center gap-3">
+          <img src={JJLogo} alt="Logo JJ" className="h-10 w-auto" />
           <div className="leading-tight">
             <div className="font-display text-[15px] tracking-wide">Espaço</div>
             <div className="font-display text-[15px] tracking-[0.3em] -mt-1">BONANÇA</div>
           </div>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-[13px] uppercase tracking-[0.18em] text-foreground/80">
-          <a href="#sobre" className="hover:text-sage transition">Sobre</a>
-          <a href="#servicos" className="hover:text-sage transition">Serviços</a>
-          <a href="#equipe" className="hover:text-sage transition">Equipe</a>
-          <a href="#clinica" className="hover:text-sage transition">Clínica</a>
-          <a href="#contato" className="hover:text-sage transition">Contato</a>
+          <a href="#sobre" className="hover:text-primary transition">Sobre</a>
+          <a href="#servicos" className="hover:text-primary transition">Serviços</a>
+          <a href="#equipe" className="hover:text-primary transition">Equipe</a>
+          <a href="#clinica" className="hover:text-primary transition">Clínica</a>
+          <a href="#contato" className="hover:text-primary transition">Contato</a>
         </nav>
-        <a href="#contato" className="hidden md:inline-flex text-[12px] uppercase tracking-[0.2em] border border-foreground/30 px-5 py-2.5 rounded-full hover:bg-sage hover:text-primary-foreground hover:border-sage transition">
+        <a href="#contato" className="hidden md:inline-flex text-[12px] uppercase tracking-[0.2em] border border-foreground/30 px-5 py-2.5 rounded-full hover:bg-primary/10 hover:text-primary hover:border-primary transition">
           Agendar
         </a>
       </div>
@@ -69,24 +68,24 @@ function Nav() {
 
 function Hero() {
   return (
-    <section className="relative min-h-screen bg-sage-light text-stone-900 overflow-hidden">
+    <section className="relative min-h-screen bg-background text-foreground overflow-hidden">
       <Nav />
       {/* faint background circles */}
-      <div className="absolute -left-40 top-10 w-[700px] h-[700px] rounded-full border border-stone-900/10" />
-      <div className="absolute -left-20 top-32 w-[500px] h-[500px] rounded-full border border-stone-900/10" />
+      <div className="absolute -left-40 top-10 w-[700px] h-[700px] rounded-full border border-border" />
+      <div className="absolute -left-20 top-32 w-[500px] h-[500px] rounded-full border border-border" />
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10 pt-40 pb-24 grid lg:grid-cols-2 gap-12 items-center">
         <div className="space-y-8 z-10">
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-stone-900">
-            Realce a sua<br/>beleza natural<br/>com ciência e<br/><em className="text-sage-dark">sofisticação.</em>
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-foreground">
+            Realce a sua<br/>beleza natural<br/>com ciência e<br/><em className="text-primary">sofisticação.</em>
           </h1>
-          <p className="text-base md:text-lg max-w-md text-stone-700 leading-relaxed">
+          <p className="text-base md:text-lg max-w-md text-muted-foreground leading-relaxed">
             Tratamentos estéticos avançados conduzidos por especialistas, com tecnologia de ponta e olhar humano para cada paciente.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <a href="#contato" className="inline-flex items-center gap-2 bg-stone-900 text-sage-light px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-stone-800 transition">
+            <a href="#contato" className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-primary/90 transition">
               Agende sua consulta
             </a>
-            <a href="#servicos" className="inline-flex items-center gap-2 border border-stone-900/40 text-stone-900 px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-stone-900/5 transition">
+            <a href="#servicos" className="inline-flex items-center gap-2 border border-border text-foreground px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-primary/5 transition">
               Nossos serviços
             </a>
           </div>
@@ -95,7 +94,7 @@ function Hero() {
           <img src={hero} alt="Beleza natural" width={1280} height={896} className="w-full h-[520px] lg:h-[640px] object-cover rounded-sm" />
         </div>
       </div>
-      <a href="https://wa.me/5500000000000" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-xl hover:scale-105 transition">
+      <a href="https://wa.me/5500000000000" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#6B4A3A] text-white flex items-center justify-center shadow-xl hover:bg-[#3A241A] hover:scale-105 transition">
         <MessageCircle className="h-7 w-7" />
       </a>
     </section>
@@ -110,21 +109,42 @@ function Services() {
       </div>
       <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
         <div className="text-center mb-16 space-y-3">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-sage">— O que fazemos</span>
+          <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— O que fazemos</span>
           <h2 className="font-display text-4xl md:text-5xl">Nossos procedimentos</h2>
-          <div className="mx-auto h-px w-24 bg-sage/60" />
+          <div className="mx-auto h-px w-24 bg-secondary/50" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
-          {services.map((s) => (
-            <div key={s.title} className="group relative h-[360px] overflow-hidden rounded-sm cursor-pointer">
-              <img src={s.img} alt={s.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-4">
-                <div className="h-px w-8 bg-sage mb-3" />
-                <h3 className="font-display text-lg text-white">{s.title}</h3>
+          {services.map((s) => {
+            const CardContent = (
+              <>
+                <img src={s.img} alt={s.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-4">
+                  <div className="h-px w-8 bg-secondary mb-3" />
+                  <h3 className="font-display text-lg text-white">{s.title}</h3>
+                  <p className="text-sm text-white/75 mt-1">{s.desc}</p>
+                </div>
+              </>
+            );
+
+            if (s.title === "Outros Procedimentos") {
+              return (
+                <Link
+                  key={s.title}
+                  to="/"
+                  className="group relative h-[360px] overflow-hidden rounded-sm transition-transform duration-300 hover:-translate-y-1"
+                >
+                  {CardContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div key={s.title} className="group relative h-[360px] overflow-hidden rounded-sm cursor-pointer">
+                {CardContent}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
@@ -135,19 +155,19 @@ function DoctorBlock({ img, name, role, body, reverse }: { img: string; name: st
   return (
     <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${reverse ? "lg:[&>div:first-child]:order-2" : ""}`}>
       <div className="space-y-6">
-        <span className="text-[11px] uppercase tracking-[0.4em] text-sage">— {role}</span>
+        <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— {role}</span>
         <h3 className="font-display text-4xl md:text-5xl">{name}</h3>
         <div className="h-px w-16 bg-sage" />
         <p className="text-muted-foreground leading-relaxed max-w-lg">{body}</p>
         <p className="text-muted-foreground leading-relaxed max-w-lg">
           Atua com foco em resultados naturais, sempre respeitando a individualidade e a anatomia de cada paciente.
         </p>
-        <a href="#contato" className="inline-block text-sage text-sm uppercase tracking-[0.2em] border-b border-sage pb-1 hover:text-sage-light transition">
+        <a href="#contato" className="inline-block text-primary text-sm uppercase tracking-[0.2em] border-b border-primary pb-1 hover:text-secondary transition">
           Conhecer agenda →
         </a>
       </div>
       <div className="relative">
-        <div className="absolute -inset-4 border border-sage/30 rounded-sm" />
+        <div className="absolute -inset-4 border border-secondary/30 rounded-sm" />
         <img src={img} alt={name} loading="lazy" className="relative w-full max-w-md mx-auto h-[520px] object-cover rounded-sm" />
       </div>
     </div>
@@ -181,9 +201,9 @@ function VideoCard({ img }: { img: string }) {
     <div className="relative aspect-[3/4] rounded-sm overflow-hidden group cursor-pointer">
       <img src={img} alt="Depoimento" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition" />
-      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center">
         <div className="h-16 w-16 rounded-full bg-white/90 flex items-center justify-center group-hover:scale-110 transition">
-          <Play className="h-6 w-6 text-stone-900 ml-1" fill="currentColor" />
+          <Play className="h-6 w-6 text-umber ml-1" fill="currentColor" />
         </div>
       </div>
     </div>
@@ -195,7 +215,7 @@ function Videos() {
     <section className="bg-background py-24">
       <div className="mx-auto max-w-5xl px-6 lg:px-10">
         <div className="text-center mb-12 space-y-3">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-sage">— Quem confia em nós</span>
+          <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— Quem confia em nós</span>
           <h2 className="font-display text-4xl md:text-5xl">Histórias reais</h2>
           <div className="mx-auto h-px w-24 bg-sage/60" />
         </div>
@@ -213,16 +233,16 @@ function Clinic() {
     <section id="clinica" className="bg-background py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
         <div className="space-y-6">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-sage">— O ambiente</span>
+          <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— O ambiente</span>
           <h2 className="font-display text-4xl md:text-5xl">Uma clínica pensada<br/>para o seu bem-estar.</h2>
-          <div className="h-px w-16 bg-sage" />
+          <div className="h-px w-16 bg-secondary" />
           <p className="text-muted-foreground leading-relaxed max-w-md">
             Cada detalhe foi cuidadosamente projetado para oferecer uma experiência sensorial completa: do aroma à iluminação, do silêncio às texturas naturais.
           </p>
           <ul className="space-y-3 text-sm text-muted-foreground">
-            <li className="flex gap-3"><span className="text-sage">—</span> Tecnologia médica de última geração</li>
-            <li className="flex gap-3"><span className="text-sage">—</span> Ambientes climatizados e privativos</li>
-            <li className="flex gap-3"><span className="text-sage">—</span> Equipe técnica em constante atualização</li>
+            <li className="flex gap-3"><span className="text-secondary">—</span> Tecnologia médica de última geração</li>
+            <li className="flex gap-3"><span className="text-secondary">—</span> Ambientes climatizados e privativos</li>
+            <li className="flex gap-3"><span className="text-secondary">—</span> Equipe técnica em constante atualização</li>
           </ul>
         </div>
         <div>
@@ -238,14 +258,14 @@ function Testimonials() {
   const prev = () => setI((p) => (p - 1 + testimonials.length) % testimonials.length);
   const next = () => setI((p) => (p + 1) % testimonials.length);
   return (
-    <section className="bg-sage-light text-stone-900 py-24">
+    <section className="bg-background text-foreground py-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
         <div className="text-center mb-12 space-y-3">
-          <span className="text-[11px] uppercase tracking-[0.4em] text-stone-700">— Depoimentos</span>
+          <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground">— Depoimentos</span>
           <h2 className="font-display text-4xl md:text-5xl">O que dizem sobre nós</h2>
         </div>
         <div className="flex items-center gap-6">
-          <button onClick={prev} className="h-10 w-10 rounded-full border border-stone-900/30 flex items-center justify-center hover:bg-stone-900 hover:text-sage-light transition shrink-0">
+          <button onClick={prev} className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0">
             <ChevronLeft className="h-5 w-5" />
           </button>
           <div className="grid md:grid-cols-3 gap-5 flex-1">
@@ -255,16 +275,16 @@ function Testimonials() {
                 <div key={offset} className="bg-background/90 text-foreground rounded-sm p-6 space-y-3">
                   <div className="flex gap-1">
                     {Array.from({ length: 5 }).map((_, k) => (
-                      <Star key={k} className="h-3.5 w-3.5 fill-sage text-sage" />
+                      <Star key={k} className="h-3.5 w-3.5 fill-primary text-primary" />
                     ))}
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">"{t.text}"</p>
-                  <p className="text-xs uppercase tracking-[0.2em] text-sage">— {t.name}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-primary">— {t.name}</p>
                 </div>
               );
             })}
           </div>
-          <button onClick={next} className="h-10 w-10 rounded-full border border-stone-900/30 flex items-center justify-center hover:bg-stone-900 hover:text-sage-light transition shrink-0">
+          <button onClick={next} className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0">
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
@@ -277,7 +297,7 @@ function Contact() {
   return (
     <section id="contato" className="bg-background py-24 relative">
       <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-5 gap-0 items-stretch">
-        <form className="lg:col-span-2 bg-sage text-primary-foreground p-10 space-y-5 rounded-sm relative z-10 lg:translate-x-8" onSubmit={(e) => e.preventDefault()}>
+        <form className="lg:col-span-2 bg-secondary/10 text-primary-foreground p-10 space-y-5 rounded-sm relative z-10 lg:translate-x-8" onSubmit={(e) => e.preventDefault()}>
           <h3 className="font-display text-3xl">Entre em contato</h3>
           <div className="h-px w-12 bg-primary-foreground/40" />
           <div className="grid grid-cols-2 gap-3">
@@ -291,7 +311,7 @@ function Contact() {
             {services.map((s) => <option key={s.title} className="text-foreground">{s.title}</option>)}
           </select>
           <textarea placeholder="Mensagem" rows={3} className="w-full bg-transparent border-b border-primary-foreground/30 py-2 text-sm placeholder:text-primary-foreground/60 focus:outline-none focus:border-primary-foreground resize-none" />
-          <button type="submit" className="mt-2 w-full bg-stone-900 text-sage-light py-3 rounded-full text-xs uppercase tracking-[0.25em] hover:bg-stone-800 transition">
+          <button type="submit" className="mt-2 w-full bg-primary text-primary-foreground py-3 rounded-full text-xs uppercase tracking-[0.25em] hover:bg-primary/90 transition">
             Enviar
           </button>
         </form>
@@ -329,9 +349,7 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10 grid md:grid-cols-4 gap-10 text-sm">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
-            <div className="h-9 w-9 rounded-full border border-sage/60 flex items-center justify-center">
-              <span className="font-display text-sage text-lg italic">B</span>
-            </div>
+            <img src={JJLogo} alt="Logo JJ" className="h-9 w-auto" />
             <div className="font-display tracking-[0.3em] text-base">BONANÇA</div>
           </div>
           <p className="text-muted-foreground text-xs leading-relaxed">Estética avançada com ciência, técnica e sofisticação.</p>
