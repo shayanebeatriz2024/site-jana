@@ -6,6 +6,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+lint-output.txt
+tsc-output.txt
+package-lock.json
+GEMINI.md
 
 node_modules
 dist
