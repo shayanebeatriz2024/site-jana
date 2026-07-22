@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import JJLogo from "@/assets/JJ.png";
 import jana from "@/assets/jana.png";
 
@@ -121,14 +121,14 @@ function OutrosProcedimentos() {
             <div className="final-block-eyebrow">Procedimentos</div>
             <h2>Veja todos os<br /><em>procedimentos</em></h2>
             <p>Acesse o catálogo completo com fotos reais, descrições detalhadas e valores de cada serviço.</p>
-            <a href="/#servicos" className="btn-catalog">
+            <Link to="/site#servicos" className="btn-catalog">
               Ver Catálogo Completo
-            </a>
+            </Link>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-3 text-sm text-muted-foreground">
-          <a href="/" className="text-primary hover:underline">← Voltar para o site principal</a>
+          <Link to="/site" className="text-primary hover:underline">← Voltar para o site principal</Link>
           <img src={JJLogo} alt="Logo JJ" className="h-10 w-auto" />
           <div className="footer-role">Esteticista</div>
           <span className="footer-heart">♥</span>
