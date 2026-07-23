@@ -11,6 +11,12 @@ tsc-output.txt
 package-lock.json
 GEMINI.md
 
+# Variáveis de ambiente (nunca commitar segredos)
+.env
+.env.*
+!.env.example
+automation/node_modules
+
 node_modules
 dist
 dist-ssr
