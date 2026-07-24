@@ -12,4 +12,10 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  // Força o Nitro a rodar no build com o preset "vercel".
+  // Sem isso, FORA do ambiente Lovable (ex.: deploy na Vercel) o Nitro nem é
+  // executado — o build vira "Vite-only", sem servidor SSR, o que causa o
+  // erro 404: NOT_FOUND na Vercel. Fixar o preset aqui gera a saída
+  // .vercel/output que a plataforma entende nativamente.
+  nitro: { preset: "vercel" },
 });
