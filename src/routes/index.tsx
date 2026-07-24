@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { WEBHOOK_AGENDAMENTO, buildWhatsAppLink } from "@/lib/config";
 import {
   MessageCircle,
   MapPin,
@@ -247,20 +249,21 @@ const highlights = [
 
 const testimonials = [
   {
-    name: "Mariana C.",
-    text: "Atendimento impecável, ambiente acolhedor e resultados naturais. Saí me sentindo cuidada e renovada. Recomendo de olhos fechados.",
+    name: "Samanta Lima",
+    text: "Saudades desse atendimento maravilhoso! Não sei se lembra de mim, faz uns 4 anos que saí de Capão, e é uma das coisas que mais sinto falta daí e de uma profissional como tu! Adorava muito ser atendida por ti, além de sair belíssima com a sobrancelha TOP 😍 ainda saía muito leve, papo bom e uma energia incrível era garantido sempre que ia aí. PARABÉNS pelo teu trabalho e que Deus continue te abençoando cada vez mais. 🙏 Muito sucesso!",
   },
   {
-    name: "Juliana R.",
-    text: "Profissionalismo e empatia em cada detalhe. A equipe ouviu minhas expectativas e entregou exatamente o que eu sonhava.",
+    name: "Giancarla Fidelis Lopes",
+    text: "Eu concordo plenamente com essas postagens... tu é fera. Alto astral, energia contagiante, luz que ilumina nossas vidas. Que tenhas sempre esse coração bondoso... sucesso negaaaaa!!!!",
   },
   {
-    name: "Patrícia M.",
-    text: "Espaço sofisticado e equipe técnica de altíssimo nível. Sou cliente há dois anos e os resultados falam por si.",
+    name: "Juliana Soares",
+    text: "Eu sinto tanta saudades de fazer sobrancelha contigo, a melhor que há! Energia muito boa e papo muito bom também, aqui em Portugal não achei ninguém que faça tão boa quanto você! ❤️",
   },
 ];
 
-const WHATSAPP_LINK = "https://wa.me/555183139439";
+// Link base do WhatsApp (número centralizado em src/lib/config.ts via .env)
+const WHATSAPP_LINK = buildWhatsAppLink();
 
 // ---------- COMPONENTES ----------
 
@@ -314,14 +317,12 @@ function Hero() {
             Tratamentos estéticos personalizados e de alta performance para realçar a sua melhor versão com naturalidade.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
-            <a
-              href={WHATSAPP_LINK}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-primary/90 transition"
+            <WhatsAppButton
+              mensagem="Olá! Gostaria de agendar uma avaliação na clínica Jana Jordão. 😊"
+              className="px-7 py-3.5"
             >
-              <MessageCircle className="h-4 w-4" /> Agende sua Avaliação
-            </a>
+              Agende sua Avaliação
+            </WhatsAppButton>
             <a
               href="#servicos"
               className="inline-flex items-center gap-2 border border-white/40 text-white px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-white/10 transition"
@@ -605,7 +606,7 @@ function Testimonials() {
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
         <div className="text-center mb-12 space-y-3">
           <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground">— Depoimentos</span>
-          <h2 className="font-display text-4xl md:text-5xl">O que dizem sobre nós</h2>
+          <h2 className="font-display text-4xl md:text-5xl">O que dizem sobre a Jana</h2>
         </div>
         <div className="flex items-center gap-6">
           <button
@@ -637,7 +638,7 @@ function Testimonials() {
             <ChevronRight className="h-5 w-5" />
           </button>
         </div>
-        {/* Depoimentos de exemplo — Jana decidiu manter assim por enquanto, revisar depois com depoimentos reais */}
+        {/* Depoimentos reais de clientes da Jana */}
       </div>
     </section>
   );
@@ -650,10 +651,26 @@ function Contact() {
   const [telefone, setTelefone] = useState("");
   const [procedimento, setProcedimento] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [status, setStatus] = useState<"idle" | "enviando" | "enviado" | "erro">(
+    "idle",
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Payload estruturado enviado para a automação (n8n/Make/Typebot).
+    const payload = {
+      nome,
+      sobrenome,
+      email,
+      telefone,
+      procedimento,
+      mensagem,
+      origem: "site-jana-jordao",
+      enviadoEm: new Date().toISOString(),
+    };
+
+    // Mensagem legível para o WhatsApp (fallback / continuidade do atendimento).
     const partes = [
       `Olá! Meu nome é ${nome} ${sobrenome}.`.trim(),
       procedimento && `Tenho interesse em: ${procedimento}.`,
@@ -661,9 +678,27 @@ function Contact() {
       email && `E-mail: ${email}`,
       telefone && `Telefone: ${telefone}`,
     ].filter(Boolean);
+    const textoWhats = partes.join("\n");
 
-    const texto = encodeURIComponent(partes.join("\n"));
-    window.open(`${WHATSAPP_LINK}?text=${texto}`, "_blank");
+    // VIA 2 — dispara o webhook (POST) para o endpoint de automação.
+    if (WEBHOOK_AGENDAMENTO) {
+      try {
+        setStatus("enviando");
+        const res = await fetch(WEBHOOK_AGENDAMENTO, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        setStatus("enviado");
+      } catch (err) {
+        console.error("Falha ao enviar para o webhook de agendamento:", err);
+        setStatus("erro");
+      }
+    }
+
+    // Abre o WhatsApp para o cliente concluir o agendamento com o Chatbot.
+    window.open(buildWhatsAppLink(textoWhats), "_blank");
   };
 
   return (
@@ -706,7 +741,9 @@ function Contact() {
           <select
             value={procedimento}
             onChange={(e) => setProcedimento(e.target.value)}
-            className="w-full bg-transparent border-b border-primary-foreground/30 py-2 text-sm focus:outline-none focus:border-primary-foreground"
+            className={`w-full bg-transparent border-b border-primary-foreground/30 py-2 text-sm focus:outline-none focus:border-primary-foreground [color-scheme:dark] ${
+              procedimento ? "text-primary-foreground" : "text-primary-foreground/60"
+            }`}
           >
             <option className="text-foreground" value="">Procedimento de interesse</option>
             {services.map((s) => (
@@ -724,10 +761,22 @@ function Contact() {
           />
           <button
             type="submit"
-            className="mt-2 w-full bg-primary text-primary-foreground py-3 rounded-full text-xs uppercase tracking-[0.25em] hover:bg-primary/90 transition"
+            disabled={status === "enviando"}
+            className="mt-2 w-full bg-primary text-primary-foreground py-3 rounded-full text-xs uppercase tracking-[0.25em] hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            Enviar
+            {status === "enviando" ? "Enviando..." : "Enviar"}
           </button>
+          {status === "enviado" && (
+            <p className="text-xs text-center text-primary-foreground/80">
+              Recebemos seus dados! Continue o agendamento pelo WhatsApp. 💬
+            </p>
+          )}
+          {status === "erro" && (
+            <p className="text-xs text-center text-primary-foreground/80">
+              Não foi possível enviar automaticamente, mas abrimos o WhatsApp
+              para você concluir. 💬
+            </p>
+          )}
         </form>
         <div className="lg:col-span-3 relative">
           <img

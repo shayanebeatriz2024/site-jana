@@ -1,0 +1,17 @@
+{
+  "name": "jana-jordao-automacao",
+  "version": "1.0.0",
+  "description": "Serviço Node de integração com o Google Calendar (busca de horários livres e criação de agendamentos) para o Chatbot de WhatsApp da clínica Jana Jordão.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "teste:horarios": "node scripts/teste-horarios.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "googleapis": "^144.0.0"
+  }
+}
