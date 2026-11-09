@@ -120,15 +120,15 @@ function OutrosProcedimentos() {
           <div className="final-block">
             <div className="final-block-eyebrow">Procedimentos</div>
             <h2>Veja todos os<br /><em>procedimentos</em></h2>
-            <p>Acesse o catálogo completo com fotos reais, descrições detalhadas e valores de cada serviço.</p>
-            <Link to="/site#servicos" className="btn-catalog">
+            <p>Acesse o catálogo completo com fotos reais e descrições detalhadas de cada serviço. Dúvidas e agendamentos pelo WhatsApp.</p>
+            <Link to="/" hash="servicos" className="btn-catalog">
               Ver Catálogo Completo
             </Link>
           </div>
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-3 text-sm text-muted-foreground">
-          <Link to="/site" className="text-primary hover:underline">← Voltar para o site principal</Link>
+          <Link to="/" className="text-primary hover:underline">← Voltar para o site principal</Link>
           <img src={JJLogo} alt="Logo JJ" className="h-10 w-auto" />
           <div className="footer-role">Esteticista</div>
           <span className="footer-heart">♥</span>

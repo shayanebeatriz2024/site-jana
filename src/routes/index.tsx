@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { WEBHOOK_AGENDAMENTO, buildWhatsAppLink } from "@/lib/config";
 import {
@@ -20,38 +20,15 @@ import {
 import hero from "@/assets/espaco.png";
 import clinic from "@/assets/espaco.png";
 import janaFoto from "@/assets/jana.png";
-import JJLogo from "@/assets/JJ.png";
+// Versão clara e recortada da logo (fundo transparente) para superfícies escuras
+import logoLight from "@/assets/logo-jana-light.png";
+import limpezaDePele from "@/assets/limpeza-de-pele-depois.jpeg";
 
-// Depilação a Laser
-import depilacaoLaser01 from "@/assets/depilacao-laser-01.jpeg";
+// Foto de destaque única por serviço
 import depilacaoLaser02 from "@/assets/depilacao-laser-02.jpeg";
-import depilacaoAposDuasSessoes from "@/assets/depilacao-apos-duas-sessoes.jpeg";
-
-// Design de Sobrancelhas
 import designNormal from "@/assets/design-normal.png";
-import designSobrancelhasAntes from "@/assets/design-sobrancelhas-antes.jpeg";
-import designSobrancelhasDepois from "@/assets/design-sobrancelhas-depois.jpeg";
-import designTintura from "@/assets/design-tintura-fios-brancos.png";
-
-// Design com Henna
-import hennaAntes from "@/assets/henna-antes.jpeg";
 import hennaDepois from "@/assets/henna-depois.jpeg";
-import hennaFototipoBaixoAntes from "@/assets/henna-fototipo-baixo-antes.jpeg";
-import hennaFototipoBaixoDepois from "@/assets/henna-fototipo-baixo-depois.jpeg";
-
-// Micropigmentação de Sobrancelhas
 import microbladingFioAFio from "@/assets/microblading-fio-a-fio.png";
-import micropigmentacao02 from "@/assets/micropigmentacao-02.jpeg";
-import micropigmentacaoHibridaDepois from "@/assets/micropigmentacao-hibrida-depois.jpeg";
-import micropigmentacaoMarcada01 from "@/assets/micropigmentacao-marcada-01.jpeg";
-import micropigmentacaoMarcada02 from "@/assets/micropigmentacao-marcada-02.jpeg";
-import micropigmentacaoMarcada03 from "@/assets/micropigmentacao-marcada-03.jpeg";
-import micropigmentacaoSobrancelhas from "@/assets/micropigmentacao-sobrancelhas.jpeg";
-import retoqueMicrobladingAntes from "@/assets/retoque-microblading-antes.jpeg";
-import retoqueMicrobladingDepois from "@/assets/retoque-microblading-depois.jpeg";
-
-// Micropigmentação Labial
-import micropigmentacaoLabialAntes from "@/assets/micropigmentacao-labial-antes.jpeg";
 import micropigmentacaoLabialDepois from "@/assets/micropigmentacao-labial-depois.jpeg";
 
 // Vídeos
@@ -85,88 +62,62 @@ type MidiaItem = { type: "image" | "video"; src: string };
 type Servico = {
   title: string;
   desc: string;
-  midia: MidiaItem[];
+  /** Foto única e estática exibida no topo do card (novo padrão, sem slideshow). */
+  featuredImage?: string;
+  /** Vídeo em loop — usado apenas nos serviços que ainda não têm foto própria. */
+  video?: string;
 };
 
 const services: Servico[] = [
   {
     title: "Depilação a Laser",
     desc: "Tecnologia avançada para eliminação definitiva e confortável dos pelos indesejados.",
-    midia: [
-      { type: "image", src: depilacaoLaser01 },
-      { type: "image", src: depilacaoLaser02 },
-      { type: "image", src: depilacaoAposDuasSessoes },
-    ],
-  },
-  {
-    title: "Design de Sobrancelhas",
-    desc: "Modelagem personalizada respeitando a simetria facial e realçando sua expressão natural.",
-    midia: [
-      { type: "image", src: designNormal },
-      { type: "image", src: designSobrancelhasAntes },
-      { type: "image", src: designSobrancelhasDepois },
-      { type: "image", src: designTintura },
-    ],
+    featuredImage: depilacaoLaser02,
   },
   {
     title: "Design com Henna",
     desc: "Alinhamento e coloração natural para realçar o olhar com efeito duradouro.",
-    midia: [
-      { type: "image", src: hennaAntes },
-      { type: "image", src: hennaDepois },
-      { type: "image", src: hennaFototipoBaixoAntes },
-      { type: "image", src: hennaFototipoBaixoDepois },
-    ],
+    featuredImage: hennaDepois,
+  },
+  {
+    title: "Design de Sobrancelhas",
+    desc: "Modelagem personalizada respeitando a simetria facial e realçando sua expressão natural.",
+    featuredImage: designNormal,
   },
   {
     title: "Micropigmentação de Sobrancelhas",
     desc: "Técnica fio a fio hiper-realista para preenchimento de falhas e reconstrução de sobrancelhas.",
-    midia: [
-      { type: "image", src: microbladingFioAFio },
-      { type: "image", src: micropigmentacao02 },
-      { type: "image", src: micropigmentacaoHibridaDepois },
-      { type: "image", src: micropigmentacaoMarcada01 },
-      { type: "image", src: micropigmentacaoMarcada02 },
-      { type: "image", src: micropigmentacaoMarcada03 },
-      { type: "image", src: micropigmentacaoSobrancelhas },
-      { type: "image", src: retoqueMicrobladingAntes },
-      { type: "image", src: retoqueMicrobladingDepois },
-    ],
+    featuredImage: microbladingFioAFio,
   },
   {
     title: "Micropigmentação Labial",
     desc: "Neutralização de tom, revitalização e efeito lip tint para lábios impecáveis.",
-    midia: [
-      { type: "image", src: micropigmentacaoLabialAntes },
-      { type: "image", src: micropigmentacaoLabialDepois },
-    ],
+    featuredImage: micropigmentacaoLabialDepois,
   },
   {
     title: "Microagulhamento",
     desc: "Estímulo natural de colágeno para renovação da textura da pele.",
-    midia: [{ type: "video", src: microagulhamentoVideo }],
+    video: microagulhamentoVideo,
   },
   {
     title: "Radiofrequência Facial",
     desc: "Tratamento não invasivo que firma e revitaliza a pele em profundidade.",
-    midia: [{ type: "video", src: radiofrequenciaVideo }],
+    video: radiofrequenciaVideo,
   },
   {
     title: "Dermaplaning",
     desc: "Esfoliação física que remove células mortas, deixando a pele lisa e luminosa.",
-    midia: [{ type: "video", src: dermaplaningVideo }],
+    video: dermaplaningVideo,
   },
 ];
 
-// Dados reais fornecidos pela Jana Jordão. Campos "oQueE" de Limpeza de Pele, Dermaplaning
-// e Micropigmentação Labial ainda estão PENDENTES (ela não enviou esse texto ainda).
+// Dados reais fornecidos pela Jana Jordão.
 type ProcedimentoPrincipal = {
   nome: string;
-  midia?: MidiaItem; // undefined = ainda sem foto/vídeo (mostra aviso)
+  midia?: MidiaItem; // undefined = ainda sem foto/vídeo (mostra a logo como placeholder)
   oQueE: string;
   tempoAplicacao: string;
   formaAplicacao: string;
-  valor: string;
   diferenciaisLabel?: string; // default "Diferenciais"
   diferenciais: string;
 };
@@ -178,7 +129,6 @@ const procedimentosPrincipais: ProcedimentoPrincipal[] = [
     oQueE: "Procedimento estético feito com pequenas agulhas que realizam microperfurações na pele. Estimula a produção natural de colágeno e elastina, sendo muito utilizado para rejuvenescer, suavizar cicatrizes de acne, atenuar estrias e melhorar linhas de expressão.",
     tempoAplicacao: "1h",
     formaAplicacao: "Higienização, esfoliação leve e aplicação do microagulhamento",
-    valor: "R$ 350,00",
     diferenciaisLabel: "Diferencial",
     diferenciais: "Paciente leva para uso em home care um sérum personalizado de acordo com a queixa apresentada",
   },
@@ -188,36 +138,32 @@ const procedimentosPrincipais: ProcedimentoPrincipal[] = [
     oQueE: "Tratamento estético não invasivo que utiliza ondas eletromagnéticas para aquecer as camadas mais profundas da pele. Esse calor induz a formação de novas fibras de colágeno e elastina, melhorando a firmeza, reduzindo linhas de expressão, suavizando cicatrizes de acne e diminuindo a papada.",
     tempoAplicacao: "40 min",
     formaAplicacao: "Higienização, esfoliação, aplicação da radiofrequência e finalização com fototerapia, que estimula ainda mais a produção de colágeno",
-    valor: "R$ 100,00",
     diferenciais: "Aplicação feita 1 vez por semana ou a cada 15 dias",
   },
   {
     nome: "Limpeza de Pele",
-    midia: undefined, // TODO: ainda não recebi foto/vídeo desse procedimento
-    oQueE: "", // TODO: pendente — Jana ainda não enviou o texto de "O que é" desse procedimento
+    midia: { type: "image", src: limpezaDePele },
+    oQueE: "A limpeza de pele é um procedimento estético que promove a higienização profunda da pele, removendo impurezas, excesso de oleosidade, células mortas e comedões (cravos). Além de deixar a pele mais limpa, macia e uniforme, prepara o tecido para receber melhor os cuidados e ativos utilizados na rotina de skincare.",
     tempoAplicacao: "1h 30min",
     formaAplicacao: "Higienização, esfoliação, emoliência, extração, hidratação e finalização com fototerapia",
-    valor: "R$ 180,00",
     diferenciaisLabel: "Durabilidade",
     diferenciais: "30 dias",
   },
   {
     nome: "Micropigmentação Labial",
     midia: { type: "image", src: micropigmentacaoLabialDepois },
-    oQueE: "", // TODO: pendente — Jana ainda não enviou o texto de "O que é" desse procedimento
+    oQueE: "Técnica refinada que revitaliza, uniformiza o contorno e neutraliza o tom dos lábios, proporcionando aspecto saudável, hidratação visual e efeito lip tint natural de longa duração.",
     tempoAplicacao: "1h 30min",
     formaAplicacao: "Esfoliação, hidratação, anestesia tópica e implantação do pigmento",
-    valor: "R$ 450,00 (inclui retoque após 45 a 60 dias)",
     diferenciaisLabel: "Durabilidade",
     diferenciais: "1 a 2 anos",
   },
   {
     nome: "Dermaplaning",
     midia: { type: "video", src: dermaplaningVideo },
-    oQueE: "", // TODO: pendente — Jana ainda não enviou o texto de "O que é" desse procedimento
+    oQueE: "Procedimento estético que utiliza uma lâmina específica para realizar uma esfoliação superficial da pele, removendo células mortas e a fina camada de pelos (vellus). O resultado é uma pele mais lisa, macia, uniforme e luminosa, além de favorecer a aplicação e absorção dos produtos utilizados em casa nos cuidados faciais.",
     tempoAplicacao: "1h",
     formaAplicacao: "Higienização, esfoliação, aplicação do Dermaplaning e finalização com hidratação",
-    valor: "R$ 150,00",
     diferenciaisLabel: "Frequência",
     diferenciais: "Feito de 15 em 15 dias, ou quando a cliente achar necessário",
   },
@@ -270,13 +216,15 @@ const WHATSAPP_LINK = buildWhatsAppLink();
 function Nav() {
   return (
     <header className="absolute top-0 inset-x-0 z-30">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 py-6 flex items-center justify-between">
-        <a href="#" className="flex items-center gap-3">
-          <img src={JJLogo} alt="Logo Jana Jordão" className="h-10 w-auto" />
-          <div className="leading-tight">
-            <div className="font-display text-[15px] tracking-wide">Jana Jordão</div>
-            <div className="font-display text-[15px] tracking-[0.3em] -mt-1">ESTÉTICA AVANÇADA</div>
-          </div>
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10 py-4 md:py-6 flex items-center justify-between gap-4">
+        <a href="#" className="flex items-center shrink-0" aria-label="Jana Jordão — início">
+          <img
+            src={logoLight}
+            alt="Jana Jordão — Esteticista e Cosmetóloga"
+            width={720}
+            height={415}
+            className="h-14 md:h-16 lg:h-[72px] w-auto drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]"
+          />
         </a>
         <nav className="hidden md:flex items-center gap-8 text-[13px] uppercase tracking-[0.18em] text-foreground/80">
           <a href="#sobre" className="hover:text-primary transition">Sobre</a>
@@ -287,9 +235,11 @@ function Nav() {
           href={WHATSAPP_LINK}
           target="_blank"
           rel="noreferrer"
-          className="hidden md:inline-flex text-[12px] uppercase tracking-[0.2em] border border-foreground/30 px-5 py-2.5 rounded-full hover:bg-primary/10 hover:text-primary hover:border-primary transition"
+          className="inline-flex items-center gap-2 text-[11px] md:text-[12px] uppercase tracking-[0.18em] md:tracking-[0.2em] border border-secondary/60 text-secondary px-4 md:px-5 py-2 md:py-2.5 rounded-full hover:bg-secondary hover:text-secondary-foreground transition"
         >
-          Agendar Consulta
+          <MessageCircle className="h-3.5 w-3.5" />
+          <span className="md:hidden">Agendar</span>
+          <span className="hidden md:inline">Agendar Consulta</span>
         </a>
       </div>
     </header>
@@ -307,38 +257,45 @@ function Hero() {
       <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/70 to-black/30" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40" />
       <Nav />
-      <div className="relative z-10 mx-auto max-w-7xl px-6 lg:px-10 pt-40 pb-24 min-h-screen flex items-center">
-        <div className="space-y-8 max-w-xl">
-          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-white drop-shadow-lg">
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-10 pt-32 md:pt-40 pb-20 md:pb-24 min-h-[100svh] flex items-center">
+        <div className="space-y-6 md:space-y-8 max-w-xl">
+          <h1 className="font-display text-[2.6rem] sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] text-white drop-shadow-lg">
             Ciência, Técnica e<br />
             <em className="text-primary">Sofisticação.</em>
           </h1>
           <p className="text-base md:text-lg max-w-md text-white/85 leading-relaxed">
             Tratamentos estéticos personalizados e de alta performance para realçar a sua melhor versão com naturalidade.
           </p>
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
             <WhatsAppButton
               mensagem="Olá! Gostaria de agendar uma avaliação na clínica Jana Jordão. 😊"
-              className="px-7 py-3.5"
+              variant="light"
+              className="justify-center px-7 py-4"
             >
-              Agende sua Avaliação
+              Agendar pelo WhatsApp
             </WhatsAppButton>
             <a
               href="#servicos"
-              className="inline-flex items-center gap-2 border border-white/40 text-white px-7 py-3.5 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-white/10 transition"
+              className="inline-flex items-center justify-center gap-2 border border-white/40 text-white px-7 py-4 rounded-full text-sm uppercase tracking-[0.18em] hover:bg-white/10 transition"
             >
-              Serviços
+              Ver tratamentos
             </a>
           </div>
+          <p className="text-xs text-white/60 tracking-wide">
+            Tire suas dúvidas e agende direto com a Jana — resposta rápida.
+          </p>
         </div>
       </div>
       <a
-        href={WHATSAPP_LINK}
+        href={buildWhatsAppLink("Olá! Vim pelo site e gostaria de tirar uma dúvida / agendar um horário. 😊")}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-[#6B4A3A] text-white flex items-center justify-center shadow-xl hover:bg-[#3A241A] hover:scale-105 transition"
+        aria-label="Falar com a Jana no WhatsApp"
+        className="fixed bottom-5 right-5 md:bottom-6 md:right-6 z-50 flex items-center gap-2 rounded-full bg-[#25D366] text-white shadow-xl shadow-black/40 hover:brightness-110 hover:scale-105 transition h-14 w-14 justify-center md:w-auto md:px-5"
       >
-        <MessageCircle className="h-7 w-7" />
+        <span className="absolute inset-0 rounded-full bg-[#25D366]/50 animate-ping [animation-duration:2.5s] -z-10" />
+        <MessageCircle className="h-7 w-7 md:h-5 md:w-5" />
+        <span className="hidden md:inline text-[12px] uppercase tracking-[0.18em] font-medium">Fale conosco</span>
       </a>
     </section>
   );
@@ -346,12 +303,12 @@ function Hero() {
 
 function Stats() {
   return (
-    <section className="bg-background py-16 border-y border-border">
-      <div className="mx-auto max-w-5xl px-6 lg:px-10 grid grid-cols-3 gap-6 text-center">
+    <section className="bg-background py-12 md:py-16 border-y border-border">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-10 grid grid-cols-3 gap-3 md:gap-6 text-center">
         {stats.map((s) => (
           <div key={s.label} className="space-y-2">
-            <p className="font-display text-4xl md:text-5xl text-primary">{s.value}</p>
-            <p className="text-xs md:text-sm uppercase tracking-[0.15em] text-muted-foreground">{s.label}</p>
+            <p className="font-display text-3xl md:text-5xl text-secondary">{s.value}</p>
+            <p className="text-[10px] sm:text-xs md:text-sm uppercase tracking-[0.1em] md:tracking-[0.15em] text-muted-foreground leading-snug">{s.label}</p>
           </div>
         ))}
       </div>
@@ -361,8 +318,8 @@ function Stats() {
 
 function Sobre() {
   return (
-    <section id="sobre" className="bg-background py-28">
-      <div className="mx-auto max-w-5xl px-6 lg:px-10 text-center space-y-8">
+    <section id="sobre" className="bg-background py-20 md:py-28">
+      <div className="mx-auto max-w-5xl px-5 sm:px-6 lg:px-10 text-center space-y-8">
         <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— Sobre a clínica</span>
         <h2 className="font-display text-4xl md:text-5xl">Excelência e Cuidado Individualizado</h2>
         <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">
@@ -387,9 +344,9 @@ function Sobre() {
 
 function SobreProfissional() {
   return (
-    <section className="bg-background py-28">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
-        <div className="relative h-[600px] overflow-hidden rounded-tl-3xl rounded-tr-[160px] rounded-br-3xl rounded-bl-3xl bg-secondary/10">
+    <section className="bg-background py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="relative h-[440px] sm:h-[520px] lg:h-[600px] overflow-hidden rounded-tl-3xl rounded-tr-[160px] rounded-br-3xl rounded-bl-3xl bg-secondary/10">
           <img src={janaFoto} alt="Jana Jordão" className="w-full h-full object-cover" />
         </div>
         <div className="space-y-6">
@@ -414,34 +371,20 @@ function SobreProfissional() {
 }
 
 function ServiceCard({ s }: { s: Servico }) {
-  const [index, setIndex] = useState(0);
-  const [hovering, setHovering] = useState(false);
-  const midia = s.midia[index];
-  const hasMultiple = s.midia.length > 1;
-
-  useEffect(() => {
-    if (!hovering || !hasMultiple) return;
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % s.midia.length);
-    }, 1200);
-    return () => clearInterval(interval);
-  }, [hovering, hasMultiple, s.midia.length]);
-
   return (
-    <div
-      className="group relative h-[360px] overflow-hidden rounded-2xl cursor-pointer"
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => {
-        setHovering(false);
-        setIndex(0);
-      }}
+    <a
+      href={buildWhatsAppLink(`Olá! Tenho interesse em ${s.title} e gostaria de tirar algumas dúvidas. 😊`)}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`${s.title} — tirar dúvidas no WhatsApp`}
+      className="group relative block h-[250px] sm:h-[320px] md:h-[360px] overflow-hidden rounded-xl md:rounded-2xl"
     >
       {/* barra de destaque no topo do card */}
       <div className="absolute top-0 inset-x-0 h-1.5 bg-secondary z-10" />
 
-      {midia.type === "video" ? (
+      {s.video ? (
         <video
-          src={midia.src}
+          src={s.video}
           autoPlay
           loop
           muted
@@ -450,44 +393,39 @@ function ServiceCard({ s }: { s: Servico }) {
         />
       ) : (
         <img
-          src={midia.src}
+          src={s.featuredImage}
           alt={s.title}
+          width={640}
+          height={360}
           loading="lazy"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
       )}
       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
 
-      {hasMultiple && (
-        <div className="absolute top-4 right-3 flex gap-1 z-10">
-          {s.midia.map((_, i) => (
-            <span
-              key={i}
-              className={`h-1.5 w-1.5 rounded-full transition ${i === index ? "bg-white" : "bg-white/40"}`}
-            />
-          ))}
-        </div>
-      )}
-
-      <div className="absolute inset-x-0 bottom-0 p-4">
-        <div className="h-px w-8 bg-secondary mb-3" />
-        <h3 className="font-display text-lg text-white">{s.title}</h3>
-        <p className="text-sm text-white/75 mt-1">{s.desc}</p>
+      <div className="absolute inset-x-0 bottom-0 p-3 md:p-4">
+        <div className="h-px w-8 bg-secondary mb-2 md:mb-3" />
+        <h3 className="font-display text-base md:text-lg leading-tight text-white">{s.title}</h3>
+        <p className="hidden sm:block text-sm text-white/75 mt-1 line-clamp-3">{s.desc}</p>
+        <span className="mt-2 inline-flex items-center gap-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.15em] text-secondary group-hover:text-white transition">
+          <MessageCircle className="h-3 w-3" /> Saiba mais
+        </span>
       </div>
-    </div>
+    </a>
   );
 }
 
 function Services() {
   return (
-    <section id="servicos" className="bg-background py-28 relative overflow-hidden">
+    <section id="servicos" className="bg-background py-20 md:py-28 relative overflow-hidden">
       <div className="absolute inset-x-0 top-0 flex justify-center pointer-events-none">
-        <h2 className="font-display text-[140px] md:text-[220px] leading-none text-foreground/5 select-none whitespace-nowrap">
+        <h2 className="font-display text-[88px] sm:text-[140px] md:text-[220px] leading-none text-foreground/5 select-none whitespace-nowrap" aria-hidden="true">
           tratamentos
         </h2>
       </div>
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="text-center mb-16 space-y-3">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="text-center mb-10 md:mb-16 space-y-3">
           <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— O que fazemos</span>
           <h2 className="font-display text-4xl md:text-5xl">Procedimentos</h2>
           <div className="mx-auto h-px w-24 bg-secondary/50" />
@@ -497,6 +435,18 @@ function Services() {
             <ServiceCard key={s.title} s={s} />
           ))}
         </div>
+        <div className="mt-10 md:mt-14 text-center space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Não sabe qual tratamento é ideal para você? A Jana te orienta.
+          </p>
+          <WhatsAppButton
+            mensagem="Olá! Gostaria de uma orientação sobre qual tratamento é ideal para mim. 😊"
+            variant="light"
+            className="justify-center w-full sm:w-auto px-8 py-4"
+          >
+            Tirar dúvidas no WhatsApp
+          </WhatsAppButton>
+        </div>
       </div>
     </section>
   );
@@ -504,19 +454,19 @@ function Services() {
 
 function ProcedimentosPrincipais() {
   return (
-    <section id="procedimentos-principais" className="bg-background py-28">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="text-center mb-16 space-y-3">
+    <section id="procedimentos-principais" className="bg-background py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="text-center mb-10 md:mb-16 space-y-3">
           <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— Ficha técnica</span>
           <h2 className="font-display text-4xl md:text-5xl">Procedimentos principais</h2>
           <p className="text-muted-foreground max-w-xl mx-auto text-sm">
-            Veja os detalhes, forma de aplicação, valores e diferenciais dos principais tratamentos da Jana Jordão.
+            Veja os detalhes, forma de aplicação e diferenciais dos principais tratamentos da Jana Jordão.
           </p>
         </div>
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
           {procedimentosPrincipais.map((p) => (
-            <div key={p.nome} className="bg-foreground/5 border border-border rounded-2xl overflow-hidden">
-              <div className="relative aspect-video bg-black/40 flex items-center justify-center">
+            <div key={p.nome} className="flex flex-col bg-foreground/5 border border-border rounded-2xl overflow-hidden">
+              <div className="relative aspect-[4/3] sm:aspect-video bg-black/40 flex items-center justify-center">
                 {p.midia?.type === "video" && (
                   <video src={p.midia.src} autoPlay loop muted playsInline className="w-full h-full object-cover" />
                 )}
@@ -524,12 +474,13 @@ function ProcedimentosPrincipais() {
                   <img src={p.midia.src} alt={p.nome} loading="lazy" className="w-full h-full object-cover" />
                 )}
                 {!p.midia && (
-                  <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                    Mídia / vídeo pendente
-                  </span>
+                  // Placeholder elegante até a foto/vídeo definitivo chegar
+                  <div className="absolute inset-0 bg-gradient-to-br from-secondary/15 via-background to-secondary/5 flex items-center justify-center">
+                    <img src={logoLight} alt="Jana Jordão" className="w-1/2 max-w-[260px] h-auto opacity-90" />
+                  </div>
                 )}
               </div>
-              <div className="p-6 space-y-4">
+              <div className="flex flex-col flex-1 p-5 md:p-6 space-y-5">
                 <h3 className="font-display text-2xl">{p.nome}</h3>
                 {p.oQueE ? (
                   <div className="space-y-1">
@@ -550,12 +501,17 @@ function ProcedimentosPrincipais() {
                   <p className="text-sm text-muted-foreground">{p.formaAplicacao}</p>
                 </div>
                 <div className="space-y-1">
-                  <p className="text-[11px] uppercase tracking-[0.15em] text-secondary">Valor do procedimento</p>
-                  <p className="text-sm text-primary font-medium">{p.valor}</p>
-                </div>
-                <div className="space-y-1">
                   <p className="text-[11px] uppercase tracking-[0.15em] text-secondary">{p.diferenciaisLabel || "Diferenciais"}</p>
                   <p className="text-sm text-muted-foreground">{p.diferenciais}</p>
+                </div>
+                <div className="mt-auto pt-2">
+                  <WhatsAppButton
+                    mensagem={`Olá! Tenho interesse em ${p.nome} e gostaria de tirar dúvidas / agendar. 😊`}
+                    variant="light"
+                    className="justify-center w-full px-6 py-3.5 text-xs"
+                  >
+                    Agendar pelo WhatsApp
+                  </WhatsAppButton>
                 </div>
               </div>
             </div>
@@ -568,8 +524,8 @@ function ProcedimentosPrincipais() {
 
 function Clinic() {
   return (
-    <section id="clinica" className="bg-background py-28">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-2 gap-16 items-center">
+    <section id="clinica" className="bg-background py-20 md:py-28">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10 grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <div className="space-y-6">
           <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— O ambiente</span>
           <h2 className="font-display text-4xl md:text-5xl">
@@ -588,8 +544,8 @@ function Clinic() {
         </div>
         <div>
           {/* TODO: troque pela foto real do interior/ambiente da clínica assim que disponível */}
-          <div className="relative w-full h-[480px] rounded-sm overflow-hidden bg-gradient-to-br from-secondary/15 via-background to-secondary/5 border border-border flex items-center justify-center">
-            <img src={JJLogo} alt="Jana Jordão" className="w-32 md:w-40 h-auto object-contain opacity-90" />
+          <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[480px] rounded-sm overflow-hidden bg-gradient-to-br from-secondary/15 via-background to-secondary/5 border border-border flex items-center justify-center">
+            <img src={logoLight} alt="Jana Jordão" className="w-3/5 max-w-[340px] h-auto object-contain opacity-90" />
           </div>
         </div>
       </div>
@@ -602,38 +558,43 @@ function Testimonials() {
   const prev = () => setI((p) => (p - 1 + testimonials.length) % testimonials.length);
   const next = () => setI((p) => (p + 1) % testimonials.length);
   return (
-    <section className="bg-background text-foreground py-24">
-      <div className="mx-auto max-w-6xl px-6 lg:px-10">
-        <div className="text-center mb-12 space-y-3">
+    <section className="bg-background text-foreground py-20 md:py-24">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-10">
+        <div className="text-center mb-10 md:mb-12 space-y-3">
           <span className="text-[11px] uppercase tracking-[0.4em] text-muted-foreground">— Depoimentos</span>
           <h2 className="font-display text-4xl md:text-5xl">O que dizem sobre a Jana</h2>
         </div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
           <button
             onClick={prev}
-            className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0"
+            aria-label="Depoimento anterior"
+            className="h-9 w-9 md:h-10 md:w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0"
           >
             <ChevronLeft className="h-5 w-5" />
           </button>
-          <div className="grid md:grid-cols-3 gap-5 flex-1">
+          <div className="grid md:grid-cols-3 gap-5 flex-1 min-w-0">
             {[0, 1, 2].map((offset) => {
               const t = testimonials[(i + offset) % testimonials.length];
               return (
-                <div key={offset} className="bg-background/90 text-foreground rounded-sm p-6 space-y-3">
+                <div
+                  key={offset}
+                  className={`bg-foreground/5 border border-border text-foreground rounded-sm p-5 md:p-6 space-y-3 ${offset > 0 ? "hidden md:block" : ""}`}
+                >
                   <div className="flex gap-1">
                     {Array.from({ length: 5 }).map((_, k) => (
-                      <Star key={k} className="h-3.5 w-3.5 fill-primary text-primary" />
+                      <Star key={k} className="h-3.5 w-3.5 fill-secondary text-secondary" />
                     ))}
                   </div>
                   <p className="text-sm leading-relaxed text-muted-foreground">"{t.text}"</p>
-                  <p className="text-xs uppercase tracking-[0.2em] text-primary">— {t.name}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-secondary">— {t.name}</p>
                 </div>
               );
             })}
           </div>
           <button
             onClick={next}
-            className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0"
+            aria-label="Próximo depoimento"
+            className="h-9 w-9 md:h-10 md:w-10 rounded-full border border-border flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition shrink-0"
           >
             <ChevronRight className="h-5 w-5" />
           </button>
@@ -702,13 +663,16 @@ function Contact() {
   };
 
   return (
-    <section id="contato" className="bg-background py-24 relative">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid lg:grid-cols-5 gap-0 items-stretch">
+    <section id="contato" className="bg-background py-20 md:py-24 relative">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 grid lg:grid-cols-5 gap-0 items-stretch">
         <form
-          className="lg:col-span-2 bg-secondary/10 text-primary-foreground p-10 space-y-5 rounded-sm relative z-10 lg:translate-x-8"
+          className="lg:col-span-2 bg-secondary/10 text-primary-foreground p-6 sm:p-10 space-y-5 rounded-sm relative z-10 lg:translate-x-8"
           onSubmit={handleSubmit}
         >
           <h3 className="font-display text-3xl">Entre em contato</h3>
+          <p className="text-sm text-primary-foreground/70 -mt-2">
+            Preencha e continue o atendimento direto no WhatsApp.
+          </p>
           <div className="h-px w-12 bg-primary-foreground/40" />
           <div className="grid grid-cols-2 gap-3">
             <input
@@ -762,9 +726,10 @@ function Contact() {
           <button
             type="submit"
             disabled={status === "enviando"}
-            className="mt-2 w-full bg-primary text-primary-foreground py-3 rounded-full text-xs uppercase tracking-[0.25em] hover:bg-primary/90 transition disabled:opacity-60 disabled:cursor-not-allowed"
+            className="mt-2 w-full inline-flex items-center justify-center gap-2 bg-secondary text-secondary-foreground font-medium py-4 rounded-full text-xs uppercase tracking-[0.2em] shadow-lg shadow-black/30 hover:bg-[#E8D8C8] transition disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {status === "enviando" ? "Enviando..." : "Enviar"}
+            <MessageCircle className="h-4 w-4" />
+            {status === "enviando" ? "Enviando..." : "Enviar e agendar no WhatsApp"}
           </button>
           {status === "enviado" && (
             <p className="text-xs text-center text-primary-foreground/80">
@@ -778,12 +743,12 @@ function Contact() {
             </p>
           )}
         </form>
-        <div className="lg:col-span-3 relative">
+        <div className="hidden sm:block lg:col-span-3 relative">
           <img
             src={clinic}
             alt="Ambiente"
             loading="lazy"
-            className="w-full h-full min-h-[420px] object-cover rounded-sm"
+            className="w-full h-full min-h-[320px] lg:min-h-[420px] object-cover rounded-sm"
           />
         </div>
       </div>
@@ -793,12 +758,12 @@ function Contact() {
 
 function MapSection() {
   return (
-    <section className="bg-background py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="text-center mb-10">
+    <section className="bg-background py-16 md:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="text-center mb-8 md:mb-10">
           <h2 className="font-display text-3xl md:text-4xl">Veja como chegar até nós</h2>
         </div>
-        <div className="relative aspect-[16/7] rounded-sm overflow-hidden">
+        <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[16/7] rounded-sm overflow-hidden">
           <iframe
             title="Localização"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3463.419974287581!2d-50.02724108918097!3d-29.76549547496128!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x95187886a73cbadb%3A0x3721aa56a8f58984!2sHospital%20Santa%20Luzia!5e0!3m2!1spt-BR!2sbr!4v1784666397885!5m2!1spt-BR!2sbr"
@@ -815,13 +780,10 @@ function MapSection() {
 
 function Footer() {
   return (
-    <footer className="bg-background border-t border-border py-14">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10 grid md:grid-cols-4 gap-10 text-sm">
+    <footer className="bg-background border-t border-border pt-14 pb-24 md:pb-14">
+      <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-10 grid sm:grid-cols-2 md:grid-cols-4 gap-10 text-sm">
         <div className="space-y-3">
-          <div className="flex items-center gap-2">
-            <img src={JJLogo} alt="Logo Jana Jordão" className="h-9 w-auto" />
-            <div className="font-display tracking-[0.3em] text-base">JANA JORDÃO</div>
-          </div>
+          <img src={logoLight} alt="Jana Jordão — Esteticista e Cosmetóloga" className="h-16 w-auto" />
           <p className="text-muted-foreground text-xs leading-relaxed">
             Estética avançada com ciência, técnica e sofisticação.
           </p>

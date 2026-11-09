@@ -15,7 +15,7 @@ type WhatsAppButtonProps = {
   mensagem?: string;
   children: ReactNode;
   className?: string;
-  variant?: "primary" | "outline";
+  variant?: "primary" | "outline" | "light";
   /** Mostra o ícone do WhatsApp antes do texto (padrão: true). */
   comIcone?: boolean;
 };
@@ -25,6 +25,9 @@ const VARIANTES: Record<NonNullable<WhatsAppButtonProps["variant"]>, string> = {
     "bg-primary text-primary-foreground hover:bg-primary/90",
   outline:
     "border border-foreground/30 hover:bg-primary/10 hover:text-primary hover:border-primary",
+  // CTA de alto contraste sobre o fundo escuro (nude → champagne no hover)
+  light:
+    "bg-secondary text-secondary-foreground font-medium shadow-lg shadow-black/30 hover:bg-[#E8D8C8]",
 };
 
 const MENSAGEM_PADRAO =
