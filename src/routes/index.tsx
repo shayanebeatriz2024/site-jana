@@ -24,6 +24,16 @@ import janaFoto from "@/assets/jana.png";
 import logoLight from "@/assets/logo-jana-light.png";
 import limpezaDePele from "@/assets/limpeza-de-pele-depois.jpeg";
 
+// Galeria "Resultados reais"
+import designSobrancelhasAntes from "@/assets/design-sobrancelhas-antes.jpeg";
+import designSobrancelhasDepois from "@/assets/design-sobrancelhas-depois.jpeg";
+import labialAntes02 from "@/assets/micropigmentacao-labial-antes-02.jpeg";
+import labialDepois02 from "@/assets/micropigmentacao-labial-depois-02.jpeg";
+import hennaAplicacao from "@/assets/henna-resultado-aplicacao.jpeg";
+import hennaFinal from "@/assets/henna-resultado-final.jpeg";
+import limpezaResultado01 from "@/assets/limpeza-de-pele-resultado-01.jpeg";
+import limpezaResultado02 from "@/assets/limpeza-de-pele-resultado-02.jpeg";
+
 // Foto de destaque única por serviço
 import depilacaoLaser02 from "@/assets/depilacao-laser-02.jpeg";
 import designNormal from "@/assets/design-normal.png";
@@ -169,6 +179,43 @@ const procedimentosPrincipais: ProcedimentoPrincipal[] = [
   },
 ];
 
+// Pares de fotos exibidos lado a lado na galeria de resultados.
+type Resultado = {
+  titulo: string;
+  fotos: [{ src: string; label: string }, { src: string; label: string }];
+};
+
+const resultados: Resultado[] = [
+  {
+    titulo: "Design de Sobrancelhas",
+    fotos: [
+      { src: designSobrancelhasAntes, label: "Antes" },
+      { src: designSobrancelhasDepois, label: "Depois" },
+    ],
+  },
+  {
+    titulo: "Micropigmentação Labial",
+    fotos: [
+      { src: labialAntes02, label: "Antes" },
+      { src: labialDepois02, label: "Depois" },
+    ],
+  },
+  {
+    titulo: "Design com Henna",
+    fotos: [
+      { src: hennaAplicacao, label: "Aplicação" },
+      { src: hennaFinal, label: "Resultado" },
+    ],
+  },
+  {
+    titulo: "Limpeza de Pele",
+    fotos: [
+      { src: limpezaResultado01, label: "Resultado" },
+      { src: limpezaResultado02, label: "Resultado" },
+    ],
+  },
+];
+
 const stats = [
   { value: "98%", label: "Clientes Satisfeitas" },
   { value: "5+", label: "Anos de Experiência e Inovação" },
@@ -229,6 +276,7 @@ function Nav() {
         <nav className="hidden md:flex items-center gap-8 text-[13px] uppercase tracking-[0.18em] text-foreground/80">
           <a href="#sobre" className="hover:text-primary transition">Sobre</a>
           <a href="#servicos" className="hover:text-primary transition">Serviços</a>
+          <a href="#resultados" className="hover:text-primary transition">Resultados</a>
           <a href="#contato" className="hover:text-primary transition">Contato</a>
         </nav>
         <a
@@ -445,6 +493,64 @@ function Services() {
             className="justify-center w-full sm:w-auto px-8 py-4"
           >
             Tirar dúvidas no WhatsApp
+          </WhatsAppButton>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Resultados() {
+  return (
+    <section id="resultados" className="bg-background py-20 md:py-28 border-t border-border">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
+        <div className="text-center mb-10 md:mb-16 space-y-3">
+          <span className="text-[11px] uppercase tracking-[0.4em] text-secondary">— Antes e depois</span>
+          <h2 className="font-display text-4xl md:text-5xl">Resultados reais</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto text-sm">
+            Clientes reais atendidas pela Jana. Resultados naturais, respeitando a beleza de cada uma.
+          </p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+          {resultados.map((r) => (
+            <figure key={r.titulo} className="bg-foreground/5 border border-border rounded-2xl overflow-hidden">
+              <div className="grid grid-cols-2 gap-px bg-border">
+                {r.fotos.map((f, idx) => (
+                  <div key={idx} className="relative aspect-[3/4] overflow-hidden bg-black/40">
+                    <img
+                      src={f.src}
+                      alt={`${r.titulo} — ${f.label}`}
+                      loading="lazy"
+                      decoding="async"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                    <span className="absolute top-3 left-3 rounded-full bg-black/60 backdrop-blur-sm px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-white">
+                      {f.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <figcaption className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 md:px-5 py-4">
+                <span className="font-display text-lg md:text-xl">{r.titulo}</span>
+                <a
+                  href={buildWhatsAppLink(`Olá! Vi os resultados de ${r.titulo} no site e gostaria de agendar. 😊`)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="shrink-0 inline-flex items-center gap-1.5 text-[10px] md:text-[11px] uppercase tracking-[0.15em] text-secondary hover:text-white transition"
+                >
+                  <MessageCircle className="h-3.5 w-3.5" /> Quero esse resultado
+                </a>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+        <div className="mt-10 md:mt-14 text-center">
+          <WhatsAppButton
+            mensagem="Olá! Vi os resultados no site e gostaria de agendar uma avaliação. 😊"
+            variant="light"
+            className="justify-center w-full sm:w-auto px-8 py-4"
+          >
+            Agendar minha avaliação
           </WhatsAppButton>
         </div>
       </div>
@@ -792,6 +898,7 @@ function Footer() {
           <h4 className="text-xs uppercase tracking-[0.25em] text-sage mb-3">Navegação</h4>
           <a href="#sobre" className="block text-muted-foreground hover:text-foreground">Sobre</a>
           <a href="#servicos" className="block text-muted-foreground hover:text-foreground">Serviços</a>
+          <a href="#resultados" className="block text-muted-foreground hover:text-foreground">Resultados</a>
           <a href="#contato" className="block text-muted-foreground hover:text-foreground">Contato</a>
         </div>
         <div className="space-y-2">
@@ -837,6 +944,7 @@ function Index() {
       <Stats />
       <SobreProfissional />
       <Services />
+      <Resultados />
       <ProcedimentosPrincipais />
       <Sobre />
       <Clinic />
