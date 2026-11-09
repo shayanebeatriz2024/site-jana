@@ -196,8 +196,9 @@ const resultados: Resultado[] = [
   {
     titulo: "Micropigmentação Labial",
     fotos: [
-      { src: labialAntes02, label: "Antes" },
-      { src: labialDepois02, label: "Depois" },
+      // Ordem cronológica: logo após a aplicação → já cicatrizado
+      { src: labialDepois02, label: "Logo após" },
+      { src: labialAntes02, label: "Cicatrizado" },
     ],
   },
   {
